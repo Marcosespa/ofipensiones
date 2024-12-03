@@ -1,0 +1,60 @@
+_format_version: "2.1"
+
+services:
+  - name: reportes_service
+    host: reportes_upstream
+    protocol: http
+    routes:
+      - name: reportes
+        paths:
+          - /reportes
+        strip_path: false
+
+  - name: instituciones_service
+    host: instituciones_upstream
+    protocol: http
+    routes:
+      - name: instituciones
+        paths:
+          - /instituciones
+        strip_path: false
+
+  - name: facturacion_service
+    host: facturacion_upstream
+    protocol: http
+    routes:
+      - name: facturacion
+        paths:
+          - /facturacion
+        strip_path: false
+
+  - name: notificacion_service
+    host: notificacion_upstream
+    protocol: http
+    routes:
+      - name: notificacion
+        paths:
+          - /notificacion
+        strip_path: false
+    
+upstreams:
+  - name: reportes_upstream
+    targets:
+      - target: 10.128.0.84:8080
+        weight: 100
+
+  - name: instituciones_upstream
+    targets:
+      - target: 10.128.0.85:8080
+        weight: 100
+
+    - name: facturacion_upstream
+    targets:
+      - target: 10.128.0.84:8080
+        weight: 100
+
+  - name: notificacion_upstream
+    targets:
+      - target: 10.128.0.85:8080
+        weight: 100
+  
