@@ -1,0 +1,21 @@
+<h2>Lista de Facturas</h2>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Estudiante</th>
+        <th>Monto Total</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+    {% for factura in facturas %}
+    <tr>
+        <td>{{ factura.id }}</td>
+        <td>{{ factura.estudiante.nombre }}</td>
+        <td>{{ factura.monto_total }}</td>
+        <td>{{ factura.estado }}</td>
+        <td>
+            <a href="{% url 'crear_recibo' factura.id %}">Crear Recibo</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
