@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date
 
 class Estudiante(models.Model):
     nombre = models.CharField(max_length=100)
@@ -17,8 +18,23 @@ class Factura(models.Model):
         ('cancelada', 'Cancelada'),
     ])
 
+    def calcular_saldo_pendiente(self):
+        total_pagado = sum(recibo.monto_pagado for recibo in self.recibo_set.all())
+        return self.monto_total - total_pagado
+
+    def estado_actual(self):
+        saldo_pendiente = self.calcular_saldo_pendiente()
+        if saldo_pendiente <= 0:
+            return 'Pagada'
+        elif self.estado == 'cancelada':
+            return 'Cancelada'
+        elif date.today() > self.fecha_emision and saldo_pendiente > 0:
+            return 'Vencida'
+        else:
+            return 'Pendiente'
+
     def __str__(self):
-        return f'Factura {self.id} - {self.estudiante.nombre}'
+        return f'Factura {self.id} - {self.estudiante.nombre} - Estado Actual: {self.estado_actual()}'
 
 class Recibo(models.Model):
     factura = models.ForeignKey(Factura, on_delete=models.CASCADE)

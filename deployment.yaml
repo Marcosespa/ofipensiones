@@ -95,12 +95,12 @@ resources:
     metadata:
       items:
       - key: startup-script
-        value: |
+      value: |
           #!/bin/bash
-          sudo mkdir /home/labs
-          cd /home/labs
-          sudo git clone https://github.com/ISIS2503/ISIS2503-Microservices-AppDjango.git
-          cd ISIS2503-Microservices-AppDjango
+          sudo mkdir /home/proyecto
+          cd /home/proyecto
+          sudo git clone https://github.com/Marcosespa/sprintfinal.git
+          cd ofipensiones
           docker network create kong-net
           docker run -d --name kong --network=kong-net --restart=always \
           -v "$(pwd):/kong/declarative/" -e "KONG_DATABASE=off" \
