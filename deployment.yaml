@@ -1,8 +1,4 @@
-# ***************** Universidad de los Andes ***********************
-# ****** Departamento de Ingeniería de Sistemas y Computación ******
-# ********** Arquitectura y diseño de Software - ISIS2503 **********
-#
-# Infraestructura para laboratorio de microservicios con Django
+# Infraestructura para proyecto ofipensiones
 # Elementos a desplegar:
 # 1. Firewalls:
 #    - msd-api-gateway
@@ -10,11 +6,10 @@
 #    - msd-services-apps-web
 #    - msd-service-db
 # 2. Instancias MVs:
-#    - msd-kong-instance
-#    - msd-variables-db (postgreSQL instalado y configurado)
-#    - msd-measurements-db (postgreSQL instalado y configurado)
-#    - msd-variables-ms (Servicio de variables descargado)
-#    - msd-measurements-ms (Servicio de measurements instalado y configurado)
+#    - msd-reportes-db
+#    - msd-instituciones-db
+#    - msd-facturacion-db
+#    - msd-notificacion-db
 
 resources:
 # Firewall rules
@@ -134,6 +129,13 @@ resources:
     tags:
       items: 
       - msd-service-db
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          docker run --restart=always -d -e POSTGRES_USER=reportes_user -e POSTGRES_DB=reportes_db -e POSTGRES_PASSWORD=isis2503 -p 5432:5432 --name reportes-db postgres
+
 
 - name: msd-instituciones-db
   type: compute.v1.instance
@@ -156,6 +158,13 @@ resources:
     tags:
       items: 
       - msd-service-db
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          docker run --restart=always -d -e POSTGRES_USER=instituciones_user -e POSTGRES_DB=instituciones_db -e POSTGRES_PASSWORD=isis2503 -p 5432:5432 --name instituciones-db postgres
+
 
 - name: msd-facturacion-db
   type: compute.v1.instance
@@ -178,6 +187,14 @@ resources:
     tags:
       items: 
       - msd-service-db
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          docker run --restart=always -d -e POSTGRES_USER=facturacion_user -e POSTGRES_DB=facturacion_db -e POSTGRES_PASSWORD=isis2503 -p 5432:5432 --name facturacion-db postgres
+
+
 
 - name: msd-notificacion-db
   type: compute.v1.instance
@@ -200,6 +217,14 @@ resources:
     tags:
       items: 
       - msd-service-db
+      metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          docker run --restart=always -d -e POSTGRES_USER=notificacion_user -e POSTGRES_DB=notificacion_db -e POSTGRES_PASSWORD=isis2503 -p 5432:5432 --name notificacion-db postgres
+
+
 
 # Service instances
 - name: msd-reportes-ms
@@ -223,6 +248,22 @@ resources:
     tags:
       items: 
       - msd-services-firewall
+ metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          sudo apt-get update
+          sudo apt install python3-pip -y
+          sudo mkdir /home/proyecto
+          cd /home/proyecto
+          sudo git clone https://github.com/Marcosespa/ofipensiones.git
+          cd ofipensiones/reportes
+          sudo pip3 install -r requirements.txt
+          sudo python3 manage.py makemigrations
+          sudo python3 manage.py migrate
+
+
 
 - name: msd-instituciones-ms
   type: compute.v1.instance
@@ -245,6 +286,28 @@ resources:
     tags:
       items: 
       - msd-services-firewall
+ metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          sudo apt-get update
+          sudo apt install python3-pip -y
+          sudo mkdir /home/proyecto
+          cd /home/proyecto
+          sudo git clone https://github.com/Marcosespa/ofipensiones.git
+          cd ofipensiones/instituciones
+          sudo pip3 install -r requirements.txt
+          sudo python3 manage.py makemigrations
+          sudo python3 manage.py migrate
+
+
+
+
+
+
+
+
 
 - name: msd-facturacion-ms
   type: compute.v1.instance
@@ -267,6 +330,21 @@ resources:
     tags:
       items: 
       - msd-services-firewall
+ metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          sudo apt-get update
+          sudo apt install python3-pip -y
+          sudo mkdir /home/proyecto
+          cd /home/proyecto
+          sudo git clone https://github.com/Marcosespa/ofipensiones.git
+          cd ofipensiones/facturacion
+          sudo pip3 install -r requirements.txt
+          sudo python3 manage.py makemigrations
+          sudo python3 manage.py migrate
+
 
 - name: msd-notificacion-ms
   type: compute.v1.instance
@@ -289,3 +367,18 @@ resources:
     tags:
       items: 
       - msd-services-firewall
+ metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          sudo apt-get update
+          sudo apt install python3-pip -y
+          sudo mkdir /home/proyecto
+          cd /home/proyecto
+          sudo git clone https://github.com/Marcosespa/ofipensiones.git
+          cd ofipensiones/notificaciones
+          sudo pip3 install -r requirements.txt
+          sudo python3 manage.py makemigrations
+          sudo python3 manage.py migrate
+
