@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', inicio, name='inicio'),
     path('facturacion/', include('facturación.urls')),
+    path('api/', include('instituciones.urls')) #Es el de instituciones
 ]
