@@ -12,6 +12,7 @@
                 <th>Estudiante</th>
                 <th>Estado</th>
                 <th>Monto Total</th>
+                <th>Saldo Pendiente</th>
                 <th>Fecha de Emisión</th>
             </tr>
         </thead>
@@ -22,6 +23,7 @@
                 <td>{{ factura.estudiante }}</td>
                 <td>{{ factura.estado }}</td>
                 <td>${{ factura.monto_total }}</td>
+                <td>{{ factura.saldo_pendiente }}</td>
                 <td>{{ factura.fecha_emision }}</td>
             </tr>
             {% endfor %}
