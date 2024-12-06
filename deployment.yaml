@@ -136,7 +136,6 @@ resources:
           #!/bin/bash
           docker run --restart=always -d -e POSTGRES_USER=reportes_user -e POSTGRES_DB=reportes_db -e POSTGRES_PASSWORD=isis2503 -p 5432:5432 --name reportes-db postgres
 
-
 - name: msd-instituciones-db
   type: compute.v1.instance
   properties:
