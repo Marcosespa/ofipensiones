@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reporte de Facturas</title>
+</head>
+<body>
+    <h1>Reporte de Facturas</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Estudiante</th>
+                <th>Estado</th>
+                <th>Monto Total</th>
+                <th>Fecha de Emisión</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for factura in reporte %}
+            <tr>
+                <td>{{ factura.id }}</td>
+                <td>{{ factura.estudiante }}</td>
+                <td>{{ factura.estado }}</td>
+                <td>${{ factura.monto_total }}</td>
+                <td>{{ factura.fecha_emision }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
