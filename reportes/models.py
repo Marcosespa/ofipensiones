@@ -24,14 +24,17 @@ class Factura(models.Model):
 
     @staticmethod
     def generar_reporte_facturas():
-        facturas = Factura.objects.all()
+        from facturación.models import Factura as FacturaFacturacion
+        
+        facturas = FacturaFacturacion.objects.all()
         reporte = []
 
         for factura in facturas:
             reporte.append({
                 'id': factura.id,
                 'estudiante': factura.estudiante.nombre,
-                'estado': factura.estado,
+                'estado': factura.estado_actual(),
+                'saldo_pendiente': factura.calcular_saldo_pendiente(),
                 'monto_total': factura.monto_total,
                 'fecha_emision': factura.fecha_emision,
             })
