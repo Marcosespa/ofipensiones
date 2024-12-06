@@ -10,6 +10,10 @@
 #    - msd-instituciones-db
 #    - msd-facturacion-db
 #    - msd-notificacion-db
+#    - msd-reportes-ms
+#    - msd-instituciones-ms
+#    - msd-facturacion-ms
+#    - msd-notificacion-ms
 
 resources:
 # Firewall rules
@@ -27,6 +31,7 @@ resources:
     - IPProtocol: TCP
       ports: 
       - 8000
+
 - name: msd-services-apps
   type: compute.v1.firewall
   properties:
@@ -41,6 +46,7 @@ resources:
     - IPProtocol: TCP
       ports: 
       - 8080
+
 - name: msd-services-apps-web
   type: compute.v1.firewall
   properties:
@@ -55,6 +61,7 @@ resources:
     - IPProtocol: TCP
       ports: 
       - 8080
+
 - name: msd-service-db
   type: compute.v1.firewall
   properties:
@@ -82,7 +89,7 @@ resources:
       boot: true
       autoDelete: true
       initializeParams:
-        sourceImage: https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-101-17162-463-8
+        sourceImage: https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-101-17162-463-16
     networkInterfaces:
     - network: https://www.googleapis.com/compute/v1/projects/ofipensiones-443615/global/networks/default
       networkIP: 10.128.0.81
@@ -95,7 +102,7 @@ resources:
     metadata:
       items:
       - key: startup-script
-      value: |
+        value: |
           #!/bin/bash
           sudo mkdir /home/proyecto
           cd /home/proyecto
@@ -119,7 +126,7 @@ resources:
       boot: true
       autoDelete: true
       initializeParams:
-        sourceImage: https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-101-17162-463-8
+        sourceImage: https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-101-17162-463-16
     networkInterfaces:
     - network: https://www.googleapis.com/compute/v1/projects/ofipensiones-443615/global/networks/default
       networkIP: 10.128.0.82
@@ -147,7 +154,7 @@ resources:
       boot: true
       autoDelete: true
       initializeParams:
-        sourceImage: https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-101-17162-463-8
+        sourceImage: https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-101-17162-463-16
     networkInterfaces:
     - network: https://www.googleapis.com/compute/v1/projects/ofipensiones-443615/global/networks/default
       networkIP: 10.128.0.83
@@ -164,7 +171,6 @@ resources:
           #!/bin/bash
           docker run --restart=always -d -e POSTGRES_USER=instituciones_user -e POSTGRES_DB=instituciones_db -e POSTGRES_PASSWORD=isis2503 -p 5432:5432 --name instituciones-db postgres
 
-
 - name: msd-facturacion-db
   type: compute.v1.instance
   properties:
@@ -176,7 +182,7 @@ resources:
       boot: true
       autoDelete: true
       initializeParams:
-        sourceImage: https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-101-17162-463-8
+        sourceImage: https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-101-17162-463-16
     networkInterfaces:
     - network: https://www.googleapis.com/compute/v1/projects/ofipensiones-443615/global/networks/default
       networkIP: 10.128.0.84
@@ -193,8 +199,6 @@ resources:
           #!/bin/bash
           docker run --restart=always -d -e POSTGRES_USER=facturacion_user -e POSTGRES_DB=facturacion_db -e POSTGRES_PASSWORD=isis2503 -p 5432:5432 --name facturacion-db postgres
 
-
-
 - name: msd-notificacion-db
   type: compute.v1.instance
   properties:
@@ -206,7 +210,7 @@ resources:
       boot: true
       autoDelete: true
       initializeParams:
-        sourceImage: https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-101-17162-463-8
+        sourceImage: https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-101-17162-463-16
     networkInterfaces:
     - network: https://www.googleapis.com/compute/v1/projects/ofipensiones-443615/global/networks/default
       networkIP: 10.128.0.85
@@ -223,7 +227,6 @@ resources:
           #!/bin/bash
           docker run --restart=always -d -e POSTGRES_USER=notificacion_user -e POSTGRES_DB=notificacion_db -e POSTGRES_PASSWORD=isis2503 -p 5432:5432 --name notificacion-db postgres
 
-
 # Service instances
 - name: msd-reportes-ms
   type: compute.v1.instance
@@ -236,7 +239,7 @@ resources:
       boot: true
       autoDelete: true
       initializeParams:
-        sourceImage: https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-101-17162-463-8
+        sourceImage: https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-101-17162-463-16
     networkInterfaces:
     - network: https://www.googleapis.com/compute/v1/projects/ofipensiones-443615/global/networks/default
       networkIP: 10.128.0.86
@@ -246,7 +249,7 @@ resources:
     tags:
       items: 
       - msd-services-firewall
- metadata:
+    metadata:
       items:
       - key: startup-script
         value: |
@@ -260,8 +263,6 @@ resources:
           sudo pip3 install -r requirements.txt
           sudo python3 manage.py makemigrations
           sudo python3 manage.py migrate
-
-
 
 - name: msd-instituciones-ms
   type: compute.v1.instance
@@ -284,7 +285,7 @@ resources:
     tags:
       items: 
       - msd-services-firewall
- metadata:
+    metadata:
       items:
       - key: startup-script
         value: |
@@ -298,14 +299,6 @@ resources:
           sudo pip3 install -r requirements.txt
           sudo python3 manage.py makemigrations
           sudo python3 manage.py migrate
-
-
-
-
-
-
-
-
 
 - name: msd-facturacion-ms
   type: compute.v1.instance
@@ -328,7 +321,7 @@ resources:
     tags:
       items: 
       - msd-services-firewall
- metadata:
+    metadata:
       items:
       - key: startup-script
         value: |
@@ -342,7 +335,6 @@ resources:
           sudo pip3 install -r requirements.txt
           sudo python3 manage.py makemigrations
           sudo python3 manage.py migrate
-
 
 - name: msd-notificacion-ms
   type: compute.v1.instance
@@ -365,7 +357,7 @@ resources:
     tags:
       items: 
       - msd-services-firewall
- metadata:
+    metadata:
       items:
       - key: startup-script
         value: |
@@ -379,4 +371,3 @@ resources:
           sudo pip3 install -r requirements.txt
           sudo python3 manage.py makemigrations
           sudo python3 manage.py migrate
-
